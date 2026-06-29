@@ -86,6 +86,39 @@ def answer(query: str) -> str:
 
 
 class Handler(BaseHTTPRequestHandler):
+    def _send_json(self, status: int, body: dict[str, Any]) -> None:
+        payload = json.dumps(body).encode("utf-8")
+        self.send_response(status)
+        self.send_header("content-type", "application/json")
+        self.send_header("access-control-allow-origin", "*")
+        self.send_header("access-control-allow-methods", "GET, POST, OPTIONS")
+        self.send_header("access-control-allow-headers", "content-type")
+        self.send_header("content-length", str(len(payload)))
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(204)
+        self.send_header("access-control-allow-origin", "*")
+        self.send_header("access-control-allow-methods", "GET, POST, OPTIONS")
+        self.send_header("access-control-allow-headers", "content-type")
+        self.end_headers()
+
+    def do_GET(self) -> None:
+        if self.path not in {"/", "/health"}:
+            self.send_error(404, "not found")
+            return
+
+        self._send_json(
+            200,
+            {
+                "ok": True,
+                "service": "redline-relay-advisor",
+                "post_query_url": "/query",
+                "state": STATE,
+            },
+        )
+
     def do_POST(self) -> None:
         if self.path != "/query":
             self.send_error(404, "not found")
@@ -99,13 +132,7 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(400, "invalid json")
             return
 
-        response = {"response": answer(str(body.get("query", ""))), "state": STATE}
-        payload = json.dumps(response).encode("utf-8")
-        self.send_response(200)
-        self.send_header("content-type", "application/json")
-        self.send_header("content-length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+        self._send_json(200, {"response": answer(str(body.get("query", ""))), "state": STATE})
 
     def log_message(self, fmt: str, *args: Any) -> None:
         print("%s - %s" % (self.address_string(), fmt % args))
@@ -114,4 +141,3 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     print(f"Advisor endpoint listening on http://{HOST}:{PORT}/query")
     HTTPServer((HOST, PORT), Handler).serve_forever()
-
