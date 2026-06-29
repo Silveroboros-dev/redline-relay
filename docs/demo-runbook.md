@@ -41,9 +41,11 @@ Default if unclear: do not promote.
 
 ```sh
 vb prompt set -f agents/redline-relay/outbound-call-prompt.md
-vb call "$VOICE_ESCALATION_PHONE" --name "${VOICE_ESCALATION_NAME:-Human}" --json
+vb call "$VOICE_ESCALATION_PHONE" --name "${VOICE_ESCALATION_NAME:-Human}"
 vb logs
 ```
+
+Avoid showing `vb call --json` in public recordings unless the token is cropped or redacted. Use `vb logs` after the call completes for the session ID.
 
 ## Suggested Human Questions
 
