@@ -1,0 +1,23 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+
+# Local recordings, logs, transcripts, and screenshots may contain private data.
+recordings/
+transcripts/
+logs/
+screenshots/
+*.mp3
+*.wav
+*.m4a
+*.mp4
+*.mov
+*.webm
+
+# Local tunnel / tool state.
+.ngrok2/
+.cloudflared/
+

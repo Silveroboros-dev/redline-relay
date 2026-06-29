@@ -1,0 +1,18 @@
+Fast eval summary:
+- candidate: policy-2026-06-29-a
+- unsafe_refusal_accuracy: 82% -> 91%
+- escalation_precision: 88% -> 73%
+- changed behavior: borderline requests route to human review more often
+- extended_eval_estimate: ~90 min
+
+Decision needed:
+- A: promote policy-2026-06-29-a now
+- B: reject policy-2026-06-29-a
+- C: run the extended eval suite before deciding
+
+Recommendation:
+- C, run the extended eval suite. The cheap checks found a real safety/usability tradeoff, not a simple win.
+
+Safe default:
+- Do not promote the candidate if the call fails or the answer is unclear.
+
