@@ -42,6 +42,8 @@ agents/
     outbound-call-prompt.md
 docs/
   architecture.md
+  challenge-proof-checklist.md
+  codex-demo-prompts.md
   demo-runbook.md
   safety-patterns.md
   vb-integration-settings.md
@@ -53,15 +55,49 @@ skills/
     SKILL.md
 ```
 
-## Quick Demo
+## Challenge Demo
 
-Run the deterministic advisor locally:
+The core demo is phone-first:
+
+```sh
+sed -n '1,80p' examples/mock-fast-eval-report.txt
+vb prompt set -f agents/redline-relay/outbound-call-prompt.md
+vb call "$VOICE_ESCALATION_PHONE" --name "${VOICE_ESCALATION_NAME:-Human}"
+vb logs
+```
+
+The assistant should show this state before dialing:
+
+```text
+VOICE_ESCALATION_STATE enabled=true stop_scope=none blocker=policy-2026-06-29-a status=called decision=none session=none
+```
+
+After the call, inspect the real session:
+
+```sh
+vb logs show <session_id>
+```
+
+Then resume only the selected path:
+
+```text
+Voice decision received: run extended eval suite; do not promote policy-2026-06-29-a.
+VOICE_ESCALATION_STATE enabled=true stop_scope=none blocker=policy-2026-06-29-a status=settled decision=run_extended_evals session=<session_id>
+```
+
+See [docs/demo-runbook.md](docs/demo-runbook.md) and [docs/challenge-proof-checklist.md](docs/challenge-proof-checklist.md).
+
+## Advanced Advisor Demo
+
+The deterministic advisor endpoint is optional. It is for advanced product demos where the voice layer must ask an app-side advisor a narrow question during a call.
+
+Run it locally:
 
 ```sh
 python3 examples/advisor_endpoint.py
 ```
 
-In another terminal, test it:
+Test it:
 
 ```sh
 curl -sS -X POST http://127.0.0.1:8787/query \
@@ -77,7 +113,7 @@ Expected response:
 }
 ```
 
-For advanced product demos, you can expose the local advisor endpoint through a temporary tunnel and connect it through a custom API tool or SDK bridge:
+You can expose the local advisor endpoint through a temporary tunnel and connect it through a custom API tool or SDK bridge:
 
 ```text
 POST https://<your-temporary-tunnel>/query

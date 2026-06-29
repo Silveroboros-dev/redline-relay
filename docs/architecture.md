@@ -5,6 +5,7 @@ Redline Relay separates the voice layer from the product brain.
 ```text
 Coding/product agent
   -> detects human-owned decision
+  -> runs cheap local validation first
   -> prepares decision packet
   -> sets voice-agent prompt
   -> starts outbound call
@@ -24,6 +25,8 @@ Coding/product agent
   -> records settled state
   -> executes only the selected path
 ```
+
+The challenge-style loop does not require live voice-to-agent delegation. The coding agent prepares the packet before the call, the voice agent captures the decision, and the coding agent resumes after the session ID and selected decision are recorded.
 
 ## Boundaries
 

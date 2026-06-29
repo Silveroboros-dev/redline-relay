@@ -2,6 +2,13 @@
 
 This runbook shows the official-style phone escalation loop: a coding agent prepares the decision packet, Vocal Bridge calls the human, and the coding agent resumes from the spoken decision.
 
+The demo should prove four things:
+
+1. The trigger is discriminating: fast evals already ran, and the remaining blocker is a policy tradeoff.
+2. The call is decidable by ear: decision, stakes, A/B/C choices, recommendation, and safe default.
+3. The Vocal Bridge session is real: completed outbound session, messages, transcript, and recording when available.
+4. The coding agent resumes safely: it records the selected decision and does not re-ask.
+
 ## Preflight
 
 ```sh
@@ -37,6 +44,12 @@ Recommendation: C, because cheap checks found a real tradeoff.
 Default if unclear: do not promote.
 ```
 
+Initial state:
+
+```text
+VOICE_ESCALATION_STATE enabled=true stop_scope=none blocker=policy-2026-06-29-a status=called decision=none session=none
+```
+
 ## Call
 
 ```sh
@@ -46,6 +59,15 @@ vb logs
 ```
 
 Avoid showing `vb call --json` in public recordings unless the token is cropped or redacted. Use `vb logs` after the call completes for the session ID.
+
+Expected log proof:
+
+```text
+Status: completed
+Direction: outbound
+Messages: more than 0
+Recording: Available
+```
 
 ## Suggested Human Questions
 
@@ -74,6 +96,8 @@ Next action: run extended eval suite, leave candidate unpromoted.
 ```
 
 Do not fake call IDs or session IDs in production demos.
+
+For a Codex Desktop recording, use [codex-demo-prompts.md](codex-demo-prompts.md) to make the opening state and final resume step repeatable.
 
 ## Not Used In This Demo
 
