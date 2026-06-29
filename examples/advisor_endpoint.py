@@ -85,6 +85,29 @@ def answer(query: str) -> str:
     )
 
 
+def extract_query(body: Any) -> str:
+    """Accept common custom-tool payload shapes from voice platforms."""
+    if isinstance(body, str):
+        return body
+
+    if not isinstance(body, dict):
+        return ""
+
+    for key in ("query", "question", "input", "message", "text", "prompt", "user_question"):
+        value = body.get(key)
+        if isinstance(value, str) and value.strip():
+            return value
+
+    for nested_key in ("arguments", "args", "parameters", "payload"):
+        nested = body.get(nested_key)
+        if isinstance(nested, dict):
+            value = extract_query(nested)
+            if value:
+                return value
+
+    return json.dumps(body)
+
+
 class Handler(BaseHTTPRequestHandler):
     def _send_json(self, status: int, body: dict[str, Any]) -> None:
         payload = json.dumps(body).encode("utf-8")
@@ -132,7 +155,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_error(400, "invalid json")
             return
 
-        self._send_json(200, {"response": answer(str(body.get("query", ""))), "state": STATE})
+        query = extract_query(body)
+        self._send_json(200, {"response": answer(query), "state": STATE, "received_query": query})
 
     def log_message(self, fmt: str, *args: Any) -> None:
         print("%s - %s" % (self.address_string(), fmt % args))
