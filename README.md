@@ -25,6 +25,15 @@ The initial pattern is a coding-agent escalation loop:
 - Not a production-ready security boundary.
 - Not a place to commit phone numbers, API keys, recordings, transcripts, customer data, or real session IDs.
 
+## Platform Attribution
+
+Redline Relay is designed around [Vocal Bridge](https://vocalbridgeai.com/) as the voice layer. The examples use two Vocal Bridge surfaces:
+
+- **Voice for your Agent:** voice turns are delegated to an app-side advisor endpoint.
+- **Voice as a Tool:** a coding or product agent can initiate an outbound call with `vb call`.
+
+Vocal Bridge is the platform dependency for the phone, transcript, and voice-agent runtime in these examples. This repo is unofficial and does not imply endorsement by Vocal Bridge.
+
 ## Repository Layout
 
 ```text
@@ -100,4 +109,3 @@ Apache-2.0. See [LICENSE](LICENSE).
 ## Disclaimer
 
 Unofficial demo project. Not affiliated with or endorsed by VocalBridge, DeepLearning.AI, OpenAI, or any named platform.
-
