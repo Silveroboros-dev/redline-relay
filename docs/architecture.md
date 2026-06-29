@@ -12,7 +12,7 @@ Coding/product agent
 Voice agent
   -> states the decision, stakes, choices, recommendation, and safe default
   -> captures A/B/C or a short instruction
-  -> delegates substantive follow-up questions to ask_coding_advisor
+  -> answers follow-up questions from the prepared decision context
   -> confirms the final decision
 
 Advisor endpoint
@@ -29,7 +29,7 @@ Coding/product agent
 
 The voice agent should be the mouth and ears. The product agent or backend advisor should own domain reasoning, repo state, metrics, and current task context.
 
-The advisor endpoint in this repo is deterministic on purpose. In production, it can be replaced with a retrieval-backed or LLM-backed service, but the interface should stay narrow.
+The advisor endpoint in this repo is deterministic on purpose. It is not required for the basic escalation demo. In production, it can be connected through a custom API tool or SDK bridge and replaced with a retrieval-backed or LLM-backed service, but the interface should stay narrow.
 
 Direct custom API tool shape:
 

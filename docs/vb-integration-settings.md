@@ -1,73 +1,40 @@
-# VocalBridge Integration Settings
+# VocalBridge Settings
 
-These settings are intended for a demo caller that can delegate deeper questions to an app-side advisor endpoint.
+Use the simple official-style path for the demo: the coding agent prepares the context, Vocal Bridge calls, the human answers, and the coding agent resumes.
 
-## Direct Demo Mode
+## Recommended Toggles
 
-Choose:
-
-```text
-Custom API Tool
-```
-
-Use this mode when the voice agent should call a direct HTTP advisor endpoint.
-
-## Important Distinction
-
-AI Agent Integration is not a plain webhook URL. If the UI only gives you "When to delegate" and no URL field, do not paste the advisor URL there. AI Agent Integration expects an app connected through the Vocal Bridge SDK/data channel to receive `query_agent` and send `agent_response`.
-
-For a direct hosted endpoint, use a Custom API Tool.
-
-## Custom API Tool
-
-Create:
-
-```text
-ID: ask_coding_advisor
-Name: ask_coding_advisor
-Method: POST
-URL: https://<temporary-tunnel-host>/query
-Headers: Content-Type: application/json
-Auth: none for this local demo
-Request body: {"query":"{{query}}"}
-Response field to speak: response
-```
-
-`ID` is required by the VB config schema. If the UI hides it and save fails with `APITool id Field required`, use `vb config edit` and add `"id": "ask_coding_advisor"` to the API tool object.
-
-Useful CLI checks:
-
-```sh
-vb config options
-vb config get api-tools
-vb config edit
-```
-
-Tool instruction:
-
-```text
-When the developer asks a substantive follow-up about policy-2026-06-29-a, the eval metrics, tradeoff, recommendation, safe default, or what the coding assistant should do next, call ask_coding_advisor. Read the response verbatim. Do not call it for greetings, hearing checks, repeating A/B/C choices, final decision capture, confirmations, or call control.
-```
-
-## Speech
-
-- Speak responses verbatim: on.
-- Thinking sound: off for recordings.
+- Debug mode: on.
+- Outbound calling: on.
+- Background AI: off.
+- Web search: off.
+- AI Agent Integration: off or unselected.
+- Custom API tools: none for the challenge-style demo.
+- Speak responses verbatim: optional; on is fine if available.
+- Thinking sound: off.
 - Ambient sound: off.
 - Continuous speech: off.
-- Silence duration: around 600 ms for natural phone pauses.
-- Max call duration: 5 to 10 minutes for demos.
+- Silence duration: around 600 ms.
+- Max call duration: 5 to 10 minutes.
 
-## Backend
-
-Run:
+## CLI Setup
 
 ```sh
-python3 examples/advisor_endpoint.py
+vb agent use "Redline Relay"
+vb config set --outbound-enabled true --accept-outbound-tos
+vb config set --background-enabled false --web-search-enabled false --debug-mode true --hangup-enabled true
 ```
 
-Expose it through a temporary tunnel and configure the Custom API Tool URL:
+## Main Prompt
 
-```text
-POST https://<temporary-tunnel-host>/query
+Use:
+
+```sh
+vb prompt set -f agents/redline-relay/outbound-call-prompt.md
 ```
+
+The prompt contains the decision packet and the allowed follow-up answers. The voice agent should answer only from that prepared context.
+
+## Advanced Integrations
+
+AI Agent Integration and Custom API tools are useful for product demos where the voice agent must query an app-side agent during the call. They are separate architecture paths and are not required for this escalation demo.

@@ -10,7 +10,7 @@ The initial pattern is a coding-agent escalation loop:
 2. It detects a human-owned decision with real product, safety, or cost tradeoffs.
 3. It sends a short decision packet to a VocalBridge caller agent.
 4. The caller asks for a decision by phone.
-5. Follow-up domain questions are sent to a backend advisor endpoint through a custom API tool or SDK bridge.
+5. Follow-up domain questions are answered from the prepared decision context, or in advanced product setups, delegated to an app-side advisor.
 6. The assistant resumes only the selected path and records state.
 
 ## What This Repo Is
@@ -77,7 +77,7 @@ Expected response:
 }
 ```
 
-To connect a hosted voice agent directly, expose the local endpoint through a temporary tunnel and configure a custom API tool to call:
+For advanced product demos, you can expose the local advisor endpoint through a temporary tunnel and connect it through a custom API tool or SDK bridge:
 
 ```text
 POST https://<your-temporary-tunnel>/query

@@ -1,6 +1,6 @@
 # Demo Runbook
 
-This runbook shows a phone escalation loop for a coding-agent policy decision.
+This runbook shows the official-style phone escalation loop: a coding agent prepares the decision packet, Vocal Bridge calls the human, and the coding agent resumes from the spoken decision.
 
 ## Preflight
 
@@ -11,26 +11,13 @@ export VOICE_ESCALATION_NAME="<name>"
 command -v vb
 vb auth login
 vb agent list
-vb agent use <caller-agent-id>
+vb agent use "Redline Relay"
 vb config show
 vb config set --outbound-enabled true --accept-outbound-tos
+vb config set --background-enabled false --web-search-enabled false --debug-mode true --hangup-enabled true
 ```
 
 Do not commit phone numbers or `.env` files.
-
-## Advisor Endpoint
-
-```sh
-python3 examples/advisor_endpoint.py
-```
-
-For hosted voice platforms that need a public URL, expose the local endpoint through a temporary tunnel and configure a Custom API Tool:
-
-```text
-POST https://<temporary-tunnel-host>/query
-```
-
-Do not paste this URL into an AI Agent Integration "When to delegate" field. That field is instructions, not an endpoint.
 
 ## Evidence
 
@@ -85,3 +72,12 @@ Next action: run extended eval suite, leave candidate unpromoted.
 ```
 
 Do not fake call IDs or session IDs in production demos.
+
+## Not Used In This Demo
+
+- AI Agent Integration.
+- Custom API tools.
+- Cloudflare tunnels.
+- Live app-side advisor endpoints.
+
+Those are useful future product integrations, but the challenge-style escalation loop does not require them.
