@@ -24,11 +24,13 @@ Do not commit phone numbers or `.env` files.
 python3 examples/advisor_endpoint.py
 ```
 
-For hosted voice platforms that need a public URL, expose the local endpoint through a temporary tunnel and configure:
+For hosted voice platforms that need a public URL, expose the local endpoint through a temporary tunnel and configure a Custom API Tool:
 
 ```text
 POST https://<temporary-tunnel-host>/query
 ```
+
+Do not paste this URL into an AI Agent Integration "When to delegate" field. That field is instructions, not an endpoint.
 
 ## Evidence
 
@@ -83,4 +85,3 @@ Next action: run extended eval suite, leave candidate unpromoted.
 ```
 
 Do not fake call IDs or session IDs in production demos.
-

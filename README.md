@@ -10,7 +10,7 @@ The initial pattern is a coding-agent escalation loop:
 2. It detects a human-owned decision with real product, safety, or cost tradeoffs.
 3. It sends a short decision packet to a VocalBridge caller agent.
 4. The caller asks for a decision by phone.
-5. Follow-up domain questions are delegated to a backend advisor endpoint.
+5. Follow-up domain questions are sent to a backend advisor endpoint through a custom API tool or SDK bridge.
 6. The assistant resumes only the selected path and records state.
 
 ## What This Repo Is
@@ -29,7 +29,7 @@ The initial pattern is a coding-agent escalation loop:
 
 Redline Relay is designed around [Vocal Bridge](https://vocalbridgeai.com/) as the voice layer. The examples use two Vocal Bridge surfaces:
 
-- **Voice for your Agent:** voice turns are delegated to an app-side advisor endpoint.
+- **Voice for your Agent:** voice turns can be delegated through an app-side SDK/data-channel bridge.
 - **Voice as a Tool:** a coding or product agent can initiate an outbound call with `vb call`.
 
 Vocal Bridge is the platform dependency for the phone, transcript, and voice-agent runtime in these examples. This repo is unofficial and does not imply endorsement by Vocal Bridge.
@@ -77,7 +77,7 @@ Expected response:
 }
 ```
 
-To connect a hosted voice agent, expose the local endpoint through a temporary tunnel and configure the agent to call:
+To connect a hosted voice agent directly, expose the local endpoint through a temporary tunnel and configure a custom API tool to call:
 
 ```text
 POST https://<your-temporary-tunnel>/query

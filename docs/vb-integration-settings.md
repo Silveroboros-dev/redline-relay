@@ -2,22 +2,40 @@
 
 These settings are intended for a demo caller that can delegate deeper questions to an app-side advisor endpoint.
 
-## Integration Mode
+## Direct Demo Mode
 
 Choose:
 
 ```text
-An AI agent
+Custom API Tool
 ```
 
-Use this mode when the voice agent should delegate domain questions to a backend endpoint.
+Use this mode when the voice agent should call a direct HTTP advisor endpoint.
 
-## When To Delegate
+## Important Distinction
 
-Use:
+AI Agent Integration is not a plain webhook URL. If the UI only gives you "When to delegate" and no URL field, do not paste the advisor URL there. AI Agent Integration expects an app connected through the Vocal Bridge SDK/data channel to receive `query_agent` and send `agent_response`.
+
+For a direct hosted endpoint, use a Custom API Tool.
+
+## Custom API Tool
+
+Create:
 
 ```text
-Delegate substantive questions about policy-2026-06-29-a, fast eval metrics, repo/task state, changed files, command output, decision packet, tradeoffs, recommendation, safe default, or what the coding assistant should do next. Do not delegate greetings, hearing checks, repeating A/B/C choices, capturing the final A/B/C decision, confirmations, or call control. If asked for secrets, credentials, private data, or unrelated topics, refuse briefly and return to the A/B/C decision.
+Name: ask_coding_advisor
+Method: POST
+URL: https://<temporary-tunnel-host>/query
+Headers: Content-Type: application/json
+Auth: none for this local demo
+Request body: {"query":"{{query}}"}
+Response field to speak: response
+```
+
+Tool instruction:
+
+```text
+When the developer asks a substantive follow-up about policy-2026-06-29-a, the eval metrics, tradeoff, recommendation, safe default, or what the coding assistant should do next, call ask_coding_advisor. Read the response verbatim. Do not call it for greetings, hearing checks, repeating A/B/C choices, final decision capture, confirmations, or call control.
 ```
 
 ## Speech
@@ -37,9 +55,8 @@ Run:
 python3 examples/advisor_endpoint.py
 ```
 
-Expose it through a temporary tunnel and configure:
+Expose it through a temporary tunnel and configure the Custom API Tool URL:
 
 ```text
 POST https://<temporary-tunnel-host>/query
 ```
-
