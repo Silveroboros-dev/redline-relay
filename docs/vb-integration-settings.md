@@ -23,6 +23,7 @@ For a direct hosted endpoint, use a Custom API Tool.
 Create:
 
 ```text
+ID: ask_coding_advisor
 Name: ask_coding_advisor
 Method: POST
 URL: https://<temporary-tunnel-host>/query
@@ -30,6 +31,16 @@ Headers: Content-Type: application/json
 Auth: none for this local demo
 Request body: {"query":"{{query}}"}
 Response field to speak: response
+```
+
+`ID` is required by the VB config schema. If the UI hides it and save fails with `APITool id Field required`, use `vb config edit` and add `"id": "ask_coding_advisor"` to the API tool object.
+
+Useful CLI checks:
+
+```sh
+vb config options
+vb config get api-tools
+vb config edit
 ```
 
 Tool instruction:
